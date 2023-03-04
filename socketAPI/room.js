@@ -49,15 +49,13 @@ const Room = function (io) {
             console.log({ roomId, playerData: playerData });
             if (playerObjectList.length == 2) {
                 // io.in(roomId).emit('onOpponentFound', JSON.stringify({ playerName: _playerName, playerHealth: _playerHealth, playerDamage: _playerDamage }));
-                if (playerObjectList[0]) {
-                    socket.to(playerObjectList[0].getPlayerSocketId()).emit('onOpponentFound', JSON.stringify({
+                if (playerObjectList[0] && playerObjectList[1]) {
+                    socket.to(playerObjectList[1].getPlayerSocketId()).emit('onOpponentFound', JSON.stringify({
                         playerName: playerData[0].playerName,
                         playerHealth: playerData[0].playerHealth,
                         playerDamage: playerData[0].playerDamage
                     }))
-                }
-                if (playerObjectList[1]) {
-                    socket.to(playerObjectList[1].getPlayerSocketId()).emit('onOpponentFound', JSON.stringify({
+                    socket.to(playerObjectList[0].getPlayerSocketId()).emit('onOpponentFound', JSON.stringify({
                         playerName: playerData[1].playerName,
                         playerHealth: playerData[1].playerHealth,
                         playerDamage: playerData[1].playerDamage

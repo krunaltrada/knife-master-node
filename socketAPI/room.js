@@ -58,8 +58,8 @@ const Room = function (io) {
                     playerDamage: playerData[0].playerDamage
                 }))
                 io.in(roomId).emit('newGameAction', JSON.stringify({
-                    opponentId: playerData[0] ? playerData[0].playerId : null,
-                    playerId: playerData[1] ? playerData[1].playerId : null
+                    playerId: playerData[1] ? playerData[0].playerId : null,
+                    opponentId: playerData[0] ? playerData[1].playerId : null,
                 }));
             }
         } else {

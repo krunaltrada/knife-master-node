@@ -61,11 +61,11 @@ const Room = function (io) {
                 //     playerId: playerData[1] ? playerData[0].playerId : null,
                 //     opponentId: playerData[0] ? playerData[1].playerId : null,
                 // }));
-                socket.to(playerData[0].socketId).emit('onOpponentFound', JSON.stringify({
+                socket.to(playerData[0].socketId).emit('newGameAction', JSON.stringify({
                     playerId: playerData[0] ? playerData[0].playerId : null,
                     opponentId: playerData[1] ? playerData[1].playerId : null,
                 }))
-                socket.emit('onOpponentFound', JSON.stringify({
+                socket.emit('newGameAction', JSON.stringify({
                     playerId: playerData[1] ? playerData[1].playerId : null,
                     opponentId: playerData[0] ? playerData[0].playerId : null,
                 }))

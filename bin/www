@@ -21,7 +21,7 @@ app.set('port', port);
 let server = http.createServer(app);
 const io = app.io;
 io.listen(server, {
-  pingInterval: 1000,
+  pingInterval: 300000,
   pingTimeout: 300000
 });
 

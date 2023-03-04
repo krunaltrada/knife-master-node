@@ -22,9 +22,7 @@ const Room = function (io) {
     this.setRoomCreatorSocketId = (_roomCreatorSocketId) => { roomCreatorSocketId = _roomCreatorSocketId }
 
     this.connectPlayer = (socket, _playerName, _playerHealth, _playerDamage) => {
-        let findPlayerSocketId = playerObjectList.find((_player) => {
-            return _player.getPlayerSocketId() == socket.id;
-        });
+        let findPlayerSocketId = _.find(playerObjectList, _player => _player.getPlayerSocketId() == socket.id)
         let playerId = Date.now().toString();
         if (!findPlayerSocketId) {
             let socketId = socket.id;
@@ -70,15 +68,11 @@ const Room = function (io) {
 
         socket.on('disconnect', (reason) => {
             console.log(socket.id, '------ disconnect socket id ------', reason);
-            let findPlayerInObjList = playerObjectList.find((_player) => {
-                return _player.getPlayerSocketId() == socket.id;
-            });
+            let findPlayerInObjList = _.find(playerObjectList, _player => _player.getPlayerSocketId() == socket.id);
 
             let findPlayerData;
             if (findPlayerInObjList) {
-                findPlayerData = playerData.find((_player) => {
-                    return _player.playerId == findPlayerInObjList.getPlayerId();
-                });
+                findPlayerData = _.find(playerData, _player => _player.playerId == findPlayerInObjList.getPlayerId());
             }
 
             disconnectFunc(findPlayerInObjList, findPlayerData);
@@ -87,13 +81,9 @@ const Room = function (io) {
 
         socket.on('disconnectManual', (_playerData) => {
             const { playerId } = JSON.parse(_playerData);
-            let findPlayerInObjList = playerObjectList.find((_player) => {
-                return _player.getPlayerId() == playerId;
-            });
+            let findPlayerInObjList = _.find(playerObjectList, _player => _player.getPlayerId() == playerId);
 
-            let findPlayerData = playerData.find((_player) => {
-                return _player.playerId == playerId;
-            });
+            let findPlayerData = _.find(playerData, _player => _player.playerId == playerId);
 
             disconnectFunc(findPlayerInObjList, findPlayerData);
             deleteRoom();
@@ -101,15 +91,13 @@ const Room = function (io) {
 
         socket.on('onPlayerMove', (_playerData) => {
             let { playerId, attackType } = JSON.parse(_playerData);
-            let opponentPlayer = _.find(playerData, (_player) => {
-                return _player.playerId != playerId;
-            });
+            let opponentPlayer = _.find(playerData, _player => _player.playerId != playerId);
             socket.to(opponentPlayer.socketId).emit('onPlayerMoveAction', JSON.stringify({ playerId, attackType }));
         });
 
         socket.on("playerLose", (_playerData) => {
             let { playerId } = JSON.parse(_playerData);
-            let opponentPlayer = _.find(playerObjectList, (_player) => { return _player.getPlayerId() != playerId });
+            let opponentPlayer = _.find(playerData, _player => _player.playerId != playerId);
             socket.to(opponentPlayer.getPlayerSocketId()).emit('playerWinAction', JSON.stringify({ message: "You Win." }));
         });
     }
@@ -125,9 +113,7 @@ const Room = function (io) {
 
     const deleteRoom = () => {
         const roomObjectList = app.roomObjectList;
-        let findRoom = _.find(roomObjectList, (_room) => {
-            return _room.getRoomId() == roomId;
-        });
+        let findRoom = _.find(roomObjectList, _room => _room.getRoomId() == roomId);
         if (findRoom) {
             if (findRoom.getPlayerObjectList().length == 0 || (findRoom.getPlayerObjectList().length == 1 && gameStart)) {
                 roomObjectList.splice(roomObjectList.indexOf(findRoom), 1);

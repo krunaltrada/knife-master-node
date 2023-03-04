@@ -43,9 +43,7 @@ io.on('connection', (socket) => {
     var { playerName, playerHealth, playerDamage } = JSON.parse(_playerData);
     if (!playerName) { playerName = 'Guest' + Math.floor(Math.random() * 999999); }
 
-    let getRoom = _.find(roomObjectList, (_room) => {
-      return !_room.getRoomFull() && !_room.getGameStart();
-    });
+    let getRoom = _.find(roomObjectList, _room => !_room.getRoomFull() && !_room.getGameStart());
     if (getRoom) {
       // console.log(getRoom, '------- find room');
       console.log('------- find room -------');

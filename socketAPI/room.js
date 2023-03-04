@@ -101,10 +101,10 @@ const Room = function (io) {
 
         socket.on('onPlayerMove', (_playerData) => {
             let { playerId, attackType } = JSON.parse(_playerData);
-            let opponentPlayer = _.find(playerObjectList, (_player) => {
-                return _player.getPlayerId() != playerId;
+            let opponentPlayer = _.find(playerData, (_player) => {
+                return _player.playerId != playerId;
             });
-            socket.to(opponentPlayer.getPlayerSocketId()).emit('onPlayerMoveAction', JSON.stringify({ playerId, attackType }))
+            socket.to(opponentPlayer.socketId).emit('onPlayerMoveAction', JSON.stringify({ playerId, attackType }));
         });
 
         socket.on("playerLose", (_playerData) => {

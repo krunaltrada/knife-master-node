@@ -98,7 +98,9 @@ const Room = function (io) {
         socket.on('onPlayerMove', (_playerData) => {
             let { playerId, attackType } = JSON.parse(_playerData);
             let opponentPlayer = _.find(playerData, _player => _player.playerId != playerId);
-            socket.to(opponentPlayer.socketId).emit('onPlayerMoveAction', JSON.stringify({ playerId, attackType }));
+            if (opponentPlayer) {
+                socket.to(opponentPlayer.socketId).emit('onPlayerMoveAction', JSON.stringify({ playerId, attackType }));
+            }
         });
 
         socket.on("playerLose", (_playerData) => {

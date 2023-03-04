@@ -84,17 +84,15 @@ const Room = function (io) {
             }
 
             disconnectFunc(findPlayerInObjList, findPlayerData);
-            if (playerObjectList.length == 0) { deleteRoom() }
         });
 
-        socket.on('disconnectManual', (_playerData) => {
+        socket.on('disconnectManually', (_playerData) => {
+            console.log(socket.id, '------ disconnect manually ------');
             const { playerId } = JSON.parse(_playerData);
             let findPlayerInObjList = _.find(playerObjectList, _player => _player.getPlayerId() == playerId);
-
             let findPlayerData = _.find(playerData, _player => _player.playerId == playerId);
 
             disconnectFunc(findPlayerInObjList, findPlayerData);
-            deleteRoom();
         });
 
         socket.on('onPlayerMove', (_playerData) => {
@@ -117,17 +115,14 @@ const Room = function (io) {
         if (findPlayerInObjList) {
             io.in(roomId).emit('disconnectAction', JSON.stringify({ status: false, playerId: findPlayerInObjList.getPlayerId(), playerName: findPlayerInObjList.getPlayerName() }));
         }
+        if (playerObjectList.length == 0) { deleteRoom() }
     }
 
     const deleteRoom = () => {
         const roomObjectList = app.roomObjectList;
         let findRoom = _.find(roomObjectList, _room => _room.getRoomId() == roomId);
-        if (findRoom) {
-            if (findRoom.getPlayerObjectList().length == 0 || (findRoom.getPlayerObjectList().length == 1 && gameStart)) {
-                roomObjectList.splice(roomObjectList.indexOf(findRoom), 1);
-            }
-        }
-        console.log("After Disconnect Total Rooms :", roomObjectList.length);
+        if (findRoom) { roomObjectList.splice(roomObjectList.indexOf(findRoom), 1) }
+        console.log("After Disconnect Total Rooms : ", roomObjectList.length);
     }
 }
 

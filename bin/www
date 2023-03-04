@@ -20,7 +20,10 @@ app.set('port', port);
 
 var server = http.createServer(app);
 const io = app.io;
-io.listen(server);
+io.listen(server, {
+  pingInterval: 25000,
+  pingTimeout: 35000
+});
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -1,13 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const app = express();
 
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,12 +40,11 @@ io.on('connection', (socket) => {
 
   // Create Room
   socket.on("newGame", (_playerData) => {
-    var { playerName, playerHealth, playerDamage } = JSON.parse(_playerData);
+    let { playerName, playerHealth, playerDamage } = JSON.parse(_playerData);
     if (!playerName) { playerName = 'Guest' + Math.floor(Math.random() * 999999); }
 
     let getRoom = _.find(roomObjectList, _room => !_room.getRoomFull() && !_room.getGameStart());
     if (getRoom) {
-      // console.log(getRoom, '------- find room');
       console.log('------- find room -------');
       console.log('RoomId :', getRoom.getRoomId());
       socket.join(getRoom.getRoomId());

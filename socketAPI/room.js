@@ -57,10 +57,18 @@ const Room = function (io) {
                     playerHealth: playerData[0].playerHealth,
                     playerDamage: playerData[0].playerDamage
                 }))
-                io.in(roomId).emit('newGameAction', JSON.stringify({
-                    playerId: playerData[1] ? playerData[0].playerId : null,
-                    opponentId: playerData[0] ? playerData[1].playerId : null,
-                }));
+                // io.in(roomId).emit('newGameAction', JSON.stringify({
+                //     playerId: playerData[1] ? playerData[0].playerId : null,
+                //     opponentId: playerData[0] ? playerData[1].playerId : null,
+                // }));
+                socket.to(playerData[0].socketId).emit('onOpponentFound', JSON.stringify({
+                    playerId: playerData[0] ? playerData[0].playerId : null,
+                    opponentId: playerData[1] ? playerData[1].playerId : null,
+                }))
+                socket.emit('onOpponentFound', JSON.stringify({
+                    playerId: playerData[1] ? playerData[1].playerId : null,
+                    opponentId: playerData[0] ? playerData[0].playerId : null,
+                }))
             }
         } else {
             io.to(findPlayerSocketId.getPlayerSocketId()).emit('playerInRoomAction', JSON.stringify({ status: false, message: 'Already In Room!!' }));

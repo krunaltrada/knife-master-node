@@ -23,6 +23,12 @@ const io = app.io;
 io.listen(server, {
   pingInterval: 300000,
   pingTimeout: 300000
+}, {
+  cors: {
+    extraHeaders: {
+      "Access-Control-Allow-Origin": "*"
+    }
+  }
 });
 
 /**
